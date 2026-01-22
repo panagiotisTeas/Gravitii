@@ -8,6 +8,7 @@ extern "C" {
 #include "common.h"
 #include "utils/arena.h"
 
+// #undef USE_SIMD
 #ifdef USE_SIMD
 
 // SIMD -> SoA (Structure of Arrays)
@@ -44,7 +45,8 @@ typedef struct Bodies
 #endif
 
 
-Bodies* bodiesInit(const double* data, u64 num_bodies, Arena* arena);
+Bodies* bodiesCreate(const double* data, u64 num_bodies, Arena* arena);
+void    bodiesDraw(Bodies* bodies);
 
 #ifdef __cplusplus
 }

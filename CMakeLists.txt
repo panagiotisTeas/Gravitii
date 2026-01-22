@@ -27,6 +27,7 @@ target_sources(Gravitii
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gravitii/app.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gravitii/physics/bodies.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gravitii/physics/units.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gravitii/utils/arena.c
 )
 

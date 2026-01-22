@@ -1,6 +1,8 @@
 #include "physics/bodies.h"
 
-Bodies* bodiesInit(const double* data, u64 num_bodies, Arena* arena)
+#include "raylib.h"
+
+Bodies* bodiesCreate(const double* data, u64 num_bodies, Arena* arena)
 {
     assert(!(arena == NULL));
     assert(!(data == NULL));
@@ -44,4 +46,23 @@ Bodies* bodiesInit(const double* data, u64 num_bodies, Arena* arena)
     #endif
 
     return bodies;
+}
+
+void bodiesDraw(Bodies* bodies)
+{
+    #ifdef USE_SIMD
+
+    for (u64 i = 0; i < bodies->num_bodies; ++i)
+    {
+        DrawCircle(bodies->x[i], bodies->y[i], 3, RAYWHITE);
+    }
+
+    #else
+
+    for (u64 i = 0; i < bodies->num_bodies; ++i)
+    {
+        DrawCircle(bodies->bodies[i].x, bodies->bodies[i].y, 3, RAYWHITE);
+    }
+
+    #endif
 }

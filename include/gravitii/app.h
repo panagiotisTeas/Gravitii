@@ -6,12 +6,18 @@ extern "C" {
 #endif
 
 #include "common.h"
+#include "physics/units.h"
 
 typedef struct Gravitii 
 {
     // bodies data (assume that the user will pass the correct combination of body_init_data count and num_bodies)
     const double*   body_init_data;
     u64             num_bodies;
+
+    // units
+    LengthUnit  length_unit;
+    TimeUnit    time_unit;
+    MassUnit    mass_unit;
 
     // window
     const char* window_title;

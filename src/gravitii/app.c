@@ -2,6 +2,8 @@
 #include "utils/arena.h"
 #include "app.h"
 
+#include <stdio.h>
+
 #include "raylib.h"
 
 #define WIDTH   800
@@ -9,12 +11,13 @@
 #define TITLE   "Gravitii"
 #define FPS     60
 
-const double DEFAULT_BODY_INIT_DATA[] = {1.0, 0.0, 0.0, 0.0, 0.0,
-                                         1.0, 1.0, 2.0, 3.0, 1.0,
-                                         1.0, 4.0, 1.0, 2.0, 1.0};
+const double DEFAULT_BODY_INIT_DATA[] = {1.0, 100.0, 100.0, 0.0, 0.0,
+                                         1.0, 300.0, 200.0, 3.0, 1.0,
+                                         1.0, 400.0, 300.0, 2.0, 1.0};
 #define NUM_BODIES 3
 
 Arena* g_arena = {0};
+UnitSystem* g_unit_system = {0};
 Bodies* g_bodies = {0};
 
 void gravitiiInitConfig(Gravitii* config)
@@ -22,6 +25,10 @@ void gravitiiInitConfig(Gravitii* config)
     assert(!(config == NULL));
     config->body_init_data = DEFAULT_BODY_INIT_DATA;
     config->num_bodies = NUM_BODIES;
+
+    config->length_unit = LU_ASTRONOMICAL_UNIT;
+    config->time_unit = TU_YEAR;
+    config->mass_unit = MU_SOLAR_MASS;
 
     config->window_width = WIDTH;
     config->window_height = HEIGHT;
@@ -34,7 +41,10 @@ static void init(Gravitii* config)
     assert(!(config == NULL));
 
     g_arena = arenaCreate(MiB(4));
-    g_bodies = bodiesInit(config->body_init_data, config->num_bodies, g_arena);
+    g_bodies = bodiesCreate(config->body_init_data, config->num_bodies, g_arena);
+    g_unit_system = unitSystemCreate(config->length_unit, config->time_unit, config->mass_unit, g_arena);
+
+    printf("%lf\n", g_unit_system->G);
 
     InitWindow(config->window_width, config->window_height, config->window_title);
     SetTargetFPS(config->window_fps);
@@ -43,14 +53,21 @@ static void init(Gravitii* config)
 static void update()
 {
 
+    // temp
+    for (u64 i = 0; i < g_bodies->num_bodies; ++i)
+    {
+        g_bodies->x[i] += g_bodies->vx[i];
+        g_bodies->y[i] += g_bodies->vy[i];
+    }
+    //
 }
 
 static void draw()
 {
     BeginDrawing();
     {
-        ClearBackground(RAYWHITE);
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        ClearBackground(BLACK);
+        bodiesDraw(g_bodies);
     }
     EndDrawing();
 }
