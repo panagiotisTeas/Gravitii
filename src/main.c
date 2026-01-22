@@ -5,7 +5,10 @@
 
 int main()
 {
-    run();
+    Gravitii config;
+
+    gravitiiInitConfig(&config);
+    gravitiiRun(&config);
 
     return EXIT_SUCCESS;
 }

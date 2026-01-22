@@ -19,11 +19,15 @@ include(CompilerFlags)
 # Gravitii library
 ################################
 
+option(USE_SIMD "Use SIMD" ON)
+
 add_library(Gravitii)
 
 target_sources(Gravitii
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gravitii/app.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gravitii/physics/bodies.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gravitii/utils/arena.c
 )
 
 target_include_directories(Gravitii
@@ -42,6 +46,13 @@ target_link_libraries(Gravitii
     PRIVATE
         m pthread dl rt GL
 )
+
+if(USE_SIMD)
+    target_compile_definitions(Gravitii PUBLIC USE_SIMD)
+    message(STATUS "Building with SIMD")
+else()
+    message(STATUS "Building without SIMD")
+endif()
 
 ################################
 # main executable
